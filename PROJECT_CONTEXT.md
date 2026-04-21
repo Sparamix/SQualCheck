@@ -4,7 +4,7 @@
 > Always follow these rules before generating or editing code in this repository.**
 
 ### 1. Purpose of the Project
-- This project is **OpenSNPQual**, a **simple, cross-platform S-parameter quality checker**.
+- This project is **Sparamix.SQualCheck**, a **simple, cross-platform S-parameter quality checker**.
 - It performs passivity, reciprocity, and causality checks using **IEEE P370-inspired** methods.
 - It includes both a **GUI** (Tkinter) and a **CLI**.
 
@@ -17,8 +17,8 @@
 - **Maintain IEEE 370 alignment**, especially terminology and metric definitions.
 
 ### 3. Where the Logic Lives
-- `opensnpqual_backend.py` → computation + CLI  
-- `opensnpqual_gui.py` → Tkinter GUI  
+- `squalcheck_backend.py` → computation + CLI  
+- `squalcheck_gui.py` → Tkinter GUI  
 - `ieee_p370_quality_freq_domain.py` → P370 frequency-domain metrics  
 - `ieee_p370_quality_time_domain.py` → P370 time-domain metrics  
 - `testQualityCheck_2Port.py` → examples/tests  
@@ -54,17 +54,17 @@ If a question touches:
 
 ---
 
-# OpenSNPQual – Project Context
+# Sparamix.SQualCheck – Project Context
 
 > **NOTE FOR AI ASSISTANTS (Codex / ChatGPT / etc.):**  
-> This file describes the goals, architecture, and constraints of the OpenSNPQual project.  
+> This file describes the goals, architecture, and constraints of the SQualCheck project.  
 > **Always follow the goals and constraints in this document when editing code.**
 
 ---
 
-## 1. What OpenSNPQual Is
+## 1. What Sparamix.SQualCheck Is
 
-OpenSNPQual is a **simple, cross-platform S-parameter (Touchstone) quality checker**.
+Sparamix.SQualCheck is a **simple, cross-platform S-parameter (Touchstone) quality checker**.
 
 **Primary purpose:**
 
@@ -133,11 +133,11 @@ This project is intentionally **educational and exploratory**:
 
 > AI assistants: please **respect this structure** and update sections consistently when you add new files.
 
-- `opensnpqual.py`  
-  - Tiny entry point that imports and calls `main()` from `opensnpqual_gui`.
+- `squalcheck.py`  
+  - Tiny entry point that imports and calls `main()` from `squalcheck_gui`.
   - Allows launching the GUI as a script.
 
-- `opensnpqual_gui.py`  
+- `squalcheck_gui.py`  
   - **Tkinter-based GUI** front-end.
   - Responsibilities:
     - Create the main window, menus, file list, and results table.
@@ -145,14 +145,14 @@ This project is intentionally **educational and exploratory**:
       - Add / remove Touchstone files.
       - Run quality checks on selected/all files.
       - Show **IEEE 370 correlation** info (Help menu).
-      - Provide “About OpenSNPQual” dialog.
+      - Provide “About SQualCheck” dialog.
       - Provide simple “Report a bug” link/action.
     - Display **quality metrics** and statuses in a table:
       - Per file: passivity, reciprocity, causality, etc.
       - Color coding / severity where appropriate.
     - Call the back-end functions to perform actual analysis.
 
-- `opensnpqual_backend.py`  
+- `squalcheck_backend.py`  
   - **Core computation & CLI logic**.
   - Responsibilities:
     - Parse and handle S-parameter data (typically via helper functions or scikit-rf, depending on implementation).
@@ -200,7 +200,7 @@ This project is intentionally **educational and exploratory**:
 - `README.md`  
   - Public-facing description (GitHub-ready).
   - Summarizes:
-    - What OpenSNPQual does.
+    - What SQualCheck does.
     - How to install and run it.
     - Screenshot of the GUI.
     - Licensing (BSD 3-Clause).
@@ -236,7 +236,7 @@ The **frequency-domain** quality metrics are typically expressed as **percentage
 - `0%` → completely fails the criterion.
 - `100%` → perfectly satisfies the criterion, within numerical tolerance.
 
-OpenSNPQual defines thresholds like (example, subject to refinement in code):
+SQualCheck defines thresholds like (example, subject to refinement in code):
 
 - **Passivity / Reciprocity** (% of data points meeting the requirement):
   - GOOD:        (99.9, 100]
@@ -279,7 +279,7 @@ The back-end provides helper methods to:
 
 Typical user workflow:
 
-1. Start the GUI (e.g., `python -m opensnpqual` or similar).
+1. Start the GUI (e.g., `python -m squalcheck` or similar).
 2. Add one or more `.sNp` Touchstone files:
    - Via “File → Add…” or an “Add Files” button.
 3. For each file, the GUI:
@@ -370,7 +370,7 @@ Typical user workflow:
 
 > These are **ideas**, not strict requirements. AI assistants should treat them as **nice-to-have** and only implement when explicitly requested.
 
-- Integration with other OpenSNPTools utilities (e.g., plotting / publishing).
+- Integration with other Sparamix utilities (e.g., plotting / publishing).
 - Additional metrics:
   - Insertion loss deviation (ILD), FOMILD, skew, etc.
 - Better batch processing GUI (tree/table with progress, filters, summaries).
@@ -380,7 +380,7 @@ Typical user workflow:
 
 ## 9. Instructions for AI Assistants (Codex / ChatGPT)
 
-**You are assisting with OpenSNPQual development. Please:**
+**You are assisting with SQualCheck development. Please:**
 
 1. **Respect cross-platform constraints**
    - Do *not* introduce Windows-only or macOS-only dependencies.

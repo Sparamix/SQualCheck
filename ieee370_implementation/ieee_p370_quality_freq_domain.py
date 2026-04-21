@@ -232,7 +232,7 @@ def quality_check_frequency_domain_detailed(sdata: np.ndarray, nf: int, port_num
     }
 
 
-# Integration with OpenSNPQual
+# Integration with SQualCheck
 class IEEEP370QualityMetrics:
     """
     IEEE P370 compliant quality metrics calculator.
