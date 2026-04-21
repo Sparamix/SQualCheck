@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-OpenSNPQual - S-Parameter Quality Evaluation Tool
+Sparamix.SQualCheck - S-Parameter Quality Evaluation Tool
 Evaluates S-parameter quality metrics including Passivity, Reciprocity, and Causality
 
 This is the BACKEND. Responsibilities:
@@ -19,16 +19,16 @@ Version string (so both CLI and GUI can show the same version).
 
 Example usage, calculates TD and FD both:
   source ~/spyder-env/bin/activate
-  python3 opensnpqual.py --cli -i ./example_touchstone/example_list.csv -o test
+  python3 squalcheck.py --cli -i ./example_touchstone/example_list.csv -o test
 or
-  python3 opensnpqual.py --cli --freq-only -i ./example_touchstone/example_list.csv -o test
+  python3 squalcheck.py --cli --freq-only -i ./example_touchstone/example_list.csv -o test
 
 SPDX-License-Identifier: BSD-3-Clause
 """
 
 # Version information
-OPENSNPQUAL_VERSION = "v0.1"  # Change xx to the version number
-OPENSNPQUAL_TITLE   = f"OpenSNPQual {OPENSNPQUAL_VERSION}:  A Simple S-Parameter Quality Checker"
+SQUALCHECK_VERSION = "v0.1.1"  # Change xx to the version number
+SQUALCHECK_TITLE   = f"Sparamix.SQualCheck {SQUALCHECK_VERSION}:  A Simple S-Parameter Quality Checker"
 
 # IMPORTS
 import os
@@ -101,7 +101,7 @@ def get_settings_path(custom_path: Optional[str] = None) -> Path:
     """
     if custom_path:
         return Path(custom_path)
-    return Path(sys.argv[0]).resolve().parent / "opensnpqual_settings.json"
+    return Path(sys.argv[0]).resolve().parent / "squalcheck_settings.json"
 
 
 def load_settings(custom_path: Optional[str] = None) -> Settings:
@@ -393,8 +393,8 @@ def _evaluate_file_task(args: Tuple[str, bool]) -> Tuple[str, Dict[str, any]]:
     return filepath, result
 
 
-class OpenSNPQualCLI:
-    """Command-line interface for OpenSNPQual"""
+class SQualCheckCLI:
+    """Command-line interface for Sparamix.SQualCheck"""
     
     def __init__(self):
         self.metrics = SParameterQualityMetrics()
@@ -551,7 +551,7 @@ class OpenSNPQualCLI:
         # UTF-8 is required because the report contains emoji (🟢🔵🟡🔴❌);
         # Windows' default cp1252 cannot encode them.
         with open(output_file, 'w', encoding='utf-8') as f:
-            f.write(f"# {OPENSNPQUAL_TITLE} -- REPORT\n\n")
+            f.write(f"# {SQUALCHECK_TITLE} -- REPORT\n\n")
             f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
 
             # Results table

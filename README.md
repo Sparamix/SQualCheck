@@ -1,18 +1,18 @@
 [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](https://github.com/OpenSNPTools/OpenSNPQual)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](https://github.com/Sparamix/SQualCheck)
 
-# openSNPQual V0.1:  A Simple S-Parameter Quality Checker
+# Sparamix.SQualCheck v0.1.1:  A Simple S-Parameter Quality Checker
 
-A simple utility tool for evaluating S-parameter (Touchstone) file quality based on IEEE 370 standard. OpenSNPQual provides both GUI and CLI interfaces to assess passivity, reciprocity, and causality metrics in frequency and time domains.
+A simple utility tool for evaluating S-parameter (Touchstone) file quality based on IEEE 370 standard. SQualCheck provides both GUI and CLI interfaces to assess passivity, reciprocity, and causality metrics in frequency and time domains.
 
 Based on IEEE 370 code, re-implemented in Python using AI coders.
 
 **This code and repo is intended to be a learning experience. The results are correlated to the original code. Use discretion and caution when using. **
 
-![OpenSNPQual Screenshot GUI](./docs/graphics/screenshot_gui.png)
+![SQualCheck Screenshot GUI](./docs/graphics/screenshot_gui.png)
 
-![OpenSNPQual Screenshot Result](./docs/graphics/screenshot_result_md.png)
+![SQualCheck Screenshot Result](./docs/graphics/screenshot_result_md.png)
 
 ## 🚀 Features
 
@@ -20,7 +20,7 @@ Based on IEEE 370 code, re-implemented in Python using AI coders.
   - Passivity verification (|S| ≤ 1)
   - Reciprocity check (S_ij = S_ji)
   - Causality evaluation using Kramers-Kronig relations
-  - Python implementaion of IEEE370 code -- correlation [report here](./docs/openSNPQual_correlation_IEEE370.md)  
+  - Python implementaion of IEEE370 code -- correlation [report here](./docs/squalcheck_correlation_IEEE370.md)  
   
 - **Dual Domain Analysis**
   - Frequency domain metrics
@@ -63,8 +63,8 @@ Reference:"[IEEE Standard for Electrical Characterization of Printed Circuit Boa
 
 ```bash
 # Clone the repository
-git clone https://github.com/OpenSNPTools/openSNPQual.git
-cd OpenSNPQual
+git clone https://github.com/Sparamix/SQualCheck.git
+cd SQualCheck
 
 # Create virtual environment (recommended)
 python -m venv venv
@@ -74,7 +74,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 
 # Run the application
-python opensnpqual.py
+python squalcheck.py
 ```
 
 
@@ -86,10 +86,10 @@ Launch the graphical interface:
 
 ```bash
 # Using executable
-OpenSNPQual.exe
+SQualCheck.exe
 
 # From source
-python opensnpqual.py
+python squalcheck.py
 ```
 
 **GUI Features:**
@@ -105,19 +105,19 @@ Process files from command line:
 
 ```bash
 # Basic usage
-opensnpqual --cli -i input_files.csv
+squalcheck --cli -i input_files.csv
 
 # With custom output prefix
-opensnpqual --cli -i input_files.csv -o my_results
+squalcheck --cli -i input_files.csv -o my_results
 
 # Process specific files directly
-opensnpqual --cli file1.s2p file2.s4p file3.s8p
+squalcheck --cli file1.s2p file2.s4p file3.s8p
 
 # To run on examplef files included in the repo
-python3 opensnpqual.py --cli -i ./example_touchstone/example_list.csv -o test
+python3 squalcheck.py --cli -i ./example_touchstone/example_list.csv -o test
 
 # To run same, but only FREQ domain (initial) metrics
-python3 opensnpqual.py --cli --freq-only -i ./example_touchstone/example_list.csv -o test
+python3 squalcheck.py --cli --freq-only -i ./example_touchstone/example_list.csv -o test
 ```
 
 **Input CSV Format:**
@@ -172,7 +172,7 @@ This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICE
 - **Author**: Giorgi Maghlakelidze
 - **Email**: giorgi.snp [@] pm [DOT] me
 - **LinkedIn**: [my LinkedIn profile](https://linkedin.com/in/giorgim)
-- **Bugs & Feature Requests**: [GitHub Issues](https://github.com/OpenSNPTools/openSNPQual/issues)
+- **Bugs & Feature Requests**: [GitHub Issues](https://github.com/Sparamix/SQualCheck/issues)
 
 ---
 

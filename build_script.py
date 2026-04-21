@@ -1,5 +1,5 @@
 """
-Build script for creating OpenSNPQual Windows executable
+Build script for creating SQualCheck Windows executable
 """
 
 import os
@@ -12,8 +12,8 @@ SETUP_PY = """
 from setuptools import setup, find_packages
 
 setup(
-    name="OpenSNPQual",
-    version="1.0.0",
+    name="SQualCheck",
+    version="0.1.1",
     description="S-Parameter Quality Evaluation Tool",
     author="Your Name",
     packages=find_packages(),
@@ -26,7 +26,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'opensnpqual=opensnpqual:main',
+            'squalcheck=squalcheck:main',
         ],
     },
 )
@@ -39,7 +39,7 @@ SPEC_FILE = """
 block_cipher = None
 
 a = Analysis(
-    ['opensnpqual.py'],
+    ['squalcheck.py'],
     pathex=[],
     binaries=[],
     datas=[],
@@ -72,7 +72,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='OpenSNPQual',
+    name='SQualCheck',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -84,13 +84,13 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon='opensnpqual.ico',
+    icon='squalcheck.ico',
 )
 """
 
 # Windows batch file for building
 BATCH_FILE = """@echo off
-echo Building OpenSNPQual Windows Executable...
+echo Building SQualCheck Windows Executable...
 echo.
 
 REM Check if Python is installed
@@ -115,22 +115,22 @@ pip install numpy pandas scipy scikit-rf matplotlib pyinstaller
 
 REM Build executable
 echo Building executable...
-pyinstaller --onefile --windowed --name OpenSNPQual opensnpqual.py
+pyinstaller --onefile --windowed --name SQualCheck squalcheck.py
 
 REM Copy executable to dist folder
-if exist dist\\OpenSNPQual.exe (
+if exist dist\\SQualCheck.exe (
     echo.
-    echo Build successful! Executable located at: dist\\OpenSNPQual.exe
+    echo Build successful! Executable located at: dist\\SQualCheck.exe
     
     REM Create installer package
     echo Creating installer package...
-    mkdir OpenSNPQual_Package
-    copy dist\\OpenSNPQual.exe OpenSNPQual_Package\\
-    copy README.md OpenSNPQual_Package\\ 2>nul
-    copy LICENSE OpenSNPQual_Package\\ 2>nul
+    mkdir SQualCheck_Package
+    copy dist\\SQualCheck.exe SQualCheck_Package\\
+    copy README.md SQualCheck_Package\\ 2>nul
+    copy LICENSE SQualCheck_Package\\ 2>nul
     
     echo.
-    echo Package created in OpenSNPQual_Package folder
+    echo Package created in SQualCheck_Package folder
 ) else (
     echo.
     echo Build failed!
@@ -144,7 +144,7 @@ pause
 # Linux/Mac shell script for building
 SHELL_SCRIPT = """#!/bin/bash
 
-echo "Building OpenSNPQual Executable..."
+echo "Building SQualCheck Executable..."
 echo
 
 # Check if Python is installed
@@ -168,22 +168,22 @@ pip install numpy pandas scipy scikit-rf matplotlib pyinstaller
 
 # Build executable
 echo "Building executable..."
-pyinstaller --onefile --windowed --name OpenSNPQual opensnpqual.py
+pyinstaller --onefile --windowed --name SQualCheck squalcheck.py
 
 # Check if build was successful
-if [ -f "dist/OpenSNPQual" ]; then
+if [ -f "dist/SQualCheck" ]; then
     echo
-    echo "Build successful! Executable located at: dist/OpenSNPQual"
+    echo "Build successful! Executable located at: dist/SQualCheck"
     
     # Create package
     echo "Creating package..."
-    mkdir -p OpenSNPQual_Package
-    cp dist/OpenSNPQual OpenSNPQual_Package/
-    [ -f README.md ] && cp README.md OpenSNPQual_Package/
-    [ -f LICENSE ] && cp LICENSE OpenSNPQual_Package/
+    mkdir -p SQualCheck_Package
+    cp dist/SQualCheck SQualCheck_Package/
+    [ -f README.md ] && cp README.md SQualCheck_Package/
+    [ -f LICENSE ] && cp LICENSE SQualCheck_Package/
     
     echo
-    echo "Package created in OpenSNPQual_Package folder"
+    echo "Package created in SQualCheck_Package folder"
 else
     echo
     echo "Build failed!"
@@ -194,10 +194,10 @@ deactivate
 """
 
 # README file
-README = """# OpenSNPQual - S-Parameter Quality Evaluation Tool
+README = """# SQualCheck - S-Parameter Quality Evaluation Tool
 
 ## Overview
-OpenSNPQual is a utility for evaluating the quality of S-parameter (touchstone) files according to IEEE P370 standards.
+SQualCheck is a utility for evaluating the quality of S-parameter (touchstone) files according to IEEE P370 standards.
 
 ## Features
 - Evaluate Passivity, Reciprocity, and Causality metrics
@@ -209,29 +209,29 @@ OpenSNPQual is a utility for evaluating the quality of S-parameter (touchstone) 
 ## Installation
 
 ### Windows
-1. Download OpenSNPQual.exe from the releases
+1. Download SQualCheck.exe from the releases
 2. Place in desired directory
 3. Optional: Add to PATH for command-line usage
 
 ### From Source
 ```bash
 pip install numpy pandas scipy scikit-rf matplotlib
-python opensnpqual.py
+python squalcheck.py
 ```
 
 ## Usage
 
 ### GUI Mode
-Double-click OpenSNPQual.exe or run:
+Double-click SQualCheck.exe or run:
 ```
-OpenSNPQual.exe
+SQualCheck.exe
 ```
 
-Right-click any .s*p file and select "Open with" > OpenSNPQual for automatic loading.
+Right-click any .s*p file and select "Open with" > SQualCheck for automatic loading.
 
 ### CLI Mode
 ```
-OpenSNPQual.exe --cli -i input_files.csv -o output_prefix
+SQualCheck.exe --cli -i input_files.csv -o output_prefix
 ```
 
 ## Quality Metrics
@@ -260,13 +260,13 @@ Based on IEEE P370 standards for S-parameter quality metrics.
 
 def build_windows_exe():
     """Build Windows executable"""
-    print("Building OpenSNPQual for Windows...")
+    print("Building SQualCheck for Windows...")
     
     # Write build files
     with open('setup.py', 'w') as f:
         f.write(SETUP_PY)
     
-    with open('OpenSNPQual.spec', 'w') as f:
+    with open('SQualCheck.spec', 'w') as f:
         f.write(SPEC_FILE)
     
     with open('build_windows.bat', 'w') as f:
@@ -287,7 +287,7 @@ def build_windows_exe():
 
 def build_unix_exe():
     """Build Unix/Linux/Mac executable"""
-    print("Building OpenSNPQual for Unix/Linux/Mac...")
+    print("Building SQualCheck for Unix/Linux/Mac...")
     
     with open('build_unix.sh', 'w') as f:
         f.write(SHELL_SCRIPT)

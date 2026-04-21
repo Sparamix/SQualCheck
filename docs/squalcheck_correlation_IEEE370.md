@@ -30,7 +30,7 @@ Frequency domain result comparison:
 | Method FREQ | Causality         | Passivity         | Reciprocity       |
 |-------------|-------------------|-------------------|-------------------|
 | IEEE370     | 9.7139            | 99.9999           | 94.1444           |
-| OpenSNPQual | 9.713891          | 99.999931         | 94.144433         |
+| SQualCheck | 9.713891          | 99.999931         | 94.144433         |
 
 ---
 
@@ -46,7 +46,7 @@ Time domain calculation settings:
 | Method TIME | Causality         | Passivity         | Reciprocity       |
 |-------------|-------------------|-------------------|-------------------|
 | IEEE370     | 6.655000          | 0.010000          | 3.380000          |
-| OpenSNPQual | 6.655             | 0.015             | 3.465             |
+| SQualCheck | 6.655             | 0.015             | 3.465             |
    
 
 
@@ -56,7 +56,7 @@ Time domain calculation settings:
 |---------|-------------|-------------|
 | 1       | 9.5960e-03  | 5.7716e-03  |
 | 2       | 5.2785e-03  | 5.0836e-03  |
-| OpenSNPQual | 1             | 2             |
+| SQualCheck | 1             | 2             |
 | 1           | 9.593728e-03  | 5.771632e-03  |
 | 2           | 5.279385e-03  | 5.083631e-03  |
 
@@ -81,7 +81,7 @@ Frequency domain result comparison:
 | Method Freq | Causality         | Passivity         | Reciprocity       |
 |-------------|-------------------|-------------------|-------------------|
 | IEEE370     | 11.512            | 100.000           | 96.853            |
-| OpenSNPQual | 11.511558         | 99.999445         | 96.853300         |
+| SQualCheck | 11.511558         | 99.999445         | 96.853300         |
 
 
 ---
@@ -89,7 +89,7 @@ Frequency domain result comparison:
 | Method TIME | Causality         | Passivity         | Reciprocity       |
 |-------------|-------------------|-------------------|-------------------|
 | IEEE370     | 5.6000            | 0                 | 2.4500            |
-| OpenSNPQual | 5.595             | 0.015             | 2.43              |
+| SQualCheck | 5.595             | 0.015             | 2.43              |
 
   
 #### Matrix: causality_time_domain_difference_mv
@@ -98,7 +98,7 @@ Frequency domain result comparison:
 |---------|-------------|-------------|
 | 1       | 7.7848e-03   | 5.0713e-03  |
 | 2       | 4.2552e-03   | 4.7415e-03  |
-| OpenSNPQual | 1             | 2             |
+| SQualCheck | 1             | 2             |
 | 1           | 7.784144e-03  | 5.071260e-03  |
 | 2           | 4.266165e-03  | 4.741466e-03  |
 
@@ -126,14 +126,14 @@ Frequency domain result comparison:
 | Method Freq | Causality         | Passivity         | Reciprocity       |
 |-------------|-------------------|-------------------|-------------------|
 | IEEE370     | 96.435            | 100.000           | 99.238            |
-| OpenSNPQual | 96.435336         | 100.0             | 99.237714         |
+| SQualCheck | 96.435336         | 100.0             | 99.237714         |
 
 ---
 
 | Method TIME | Causality         | Passivity         | Reciprocity       |
 |-------------|-------------------|-------------------|-------------------|
 | IEEE370     | 22.115000         | 0                 | 7.634500          |
-| OpenSNPQual | 22.141            | 0.0               | 7.629             |
+| SQualCheck | 22.141            | 0.0               | 7.629             |
 
 causality_time_domain_difference_mv =
 
@@ -164,14 +164,14 @@ Frequency domain result comparison:
 | Method Freq | Causality         | Passivity         | Reciprocity       |
 |-------------|-------------------|-------------------|-------------------|
 | IEEE370     | 97.717            | 100.000           | 99.188            |
-| OpenSNPQual | 97.717362         | 100.0             | 99.188053         |
+| SQualCheck | 97.717362         | 100.0             | 99.188053         |
 
 ---
 
 | Method TIME | Causality         | Passivity         | Reciprocity       |
 |-------------|-------------------|-------------------|-------------------|
 | IEEE370     | 24.220500         | 0                 | 18.163500         |
-| OpenSNPQual | 24.274            | 0.0               | 18.0355           |
+| SQualCheck | 24.274            | 0.0               | 18.0355           |
 
 
 causality_time_domain_difference_mv =

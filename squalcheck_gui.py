@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-OpenSNPQual - S-Parameter Quality Evaluation Tool
+Sparamix.SQualCheck - S-Parameter Quality Evaluation Tool
 Evaluates S-parameter quality metrics including Passivity, Reciprocity, and Causality
 
 This is the FRONT END / GUI. Responsibilities:
@@ -11,7 +11,7 @@ User interface:
   * Showing metrics in a TreeView, applying row coloring, etc.
 
 Delegation to backend:
-  * Create OpenSNPQualCLI from backend.
+  * Create SQualCheckCLI from backend.
   * For each file, call cli.evaluate_file_with_time_domain() or cli.evaluate_file_frequency_only().
 
 SPDX-License-Identifier: BSD-3-Clause
@@ -42,10 +42,10 @@ except ImportError:
     DND_AVAILABLE = False
 
 # from backend
-from opensnpqual_backend import (
-    OpenSNPQualCLI,
-    OPENSNPQUAL_VERSION,
-    OPENSNPQUAL_TITLE,
+from squalcheck_backend import (
+    SQualCheckCLI,
+    SQUALCHECK_VERSION,
+    SQUALCHECK_TITLE,
     Settings,
     load_settings,
     save_settings,
@@ -84,19 +84,19 @@ class CustomInfoDialog:
         y = (self.dialog.winfo_screenheight() // 2) - (self.dialog.winfo_height() // 2)
         self.dialog.geometry(f"+{x}+{y}")
 
-class OpenSNPQualGUI:
-    """GUI for OpenSNPQual"""
+class SQualCheckGUI:
+    """GUI for Sparamix.SQualCheck"""
     SNP_EXTENSIONS = ('s1p', 's2p', 's3p', 's4p', 's6p', 's8p', 'snp', 's*p')
     
     def __init__(self):
         # Use DnD-enabled root when available, fall back gracefully otherwise
         self.root = TkinterDnD.Tk() if DND_AVAILABLE else tk.Tk()
-        self.root.title(OPENSNPQUAL_TITLE)
+        self.root.title(SQUALCHECK_TITLE)
         self.root.geometry("1200x600")
 
         # Load persisted settings (if any)
         self.settings = load_settings()
-        self.cli = OpenSNPQualCLI()
+        self.cli = SQualCheckCLI()
         self.parallel_enabled = self.settings.parallel_per_file  # can be flipped in future settings UI
         self.settings_window = None
         self.file_list = []
@@ -138,7 +138,7 @@ class OpenSNPQualGUI:
         help_menu.add_command(label="Correlation to IEEE370", command=self.show_ieee370_correlation)
         help_menu.add_command(label="Report a BUG", command=self.report_bug)
         help_menu.add_separator()
-        help_menu.add_command(label="About OpenSNPQual", command=self.show_about)
+        help_menu.add_command(label="About SQualCheck", command=self.show_about)
 
         # Main frame
         self.main_frame = ttk.Frame(self.root, padding="10")
@@ -380,7 +380,7 @@ class OpenSNPQualGUI:
                 self.root.after(0, self._update_table_row, filepath, result)
 
         # Save results automatically
-        output_csv = f"snpqual_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+        output_csv = f"squalcheck_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
         self.cli.save_csv_results(list(self.results.values()), output_csv)
         
         output_md = output_csv.replace('.csv', '.md')
@@ -581,7 +581,7 @@ class OpenSNPQualGUI:
             text.pack(fill=tk.BOTH, expand=True)
             
             # Insert content with formatting
-            text.insert("1.0", "OpenSNPQual implements IEEE 370 quality metrics in Python:\n\n")
+            text.insert("1.0", "SQualCheck implements IEEE 370 quality metrics in Python:\n\n")
             text.insert("end", "• ", "bullet")
             text.insert("end", "Frequency Domain:", "bold")
             text.insert("end", " fully correlated to 370 code\n")
@@ -597,7 +597,7 @@ class OpenSNPQualGUI:
             text.tag_config("bullet", foreground="#666666")
             text.tag_config("link", foreground="blue", underline=True)
             text.tag_bind("link", "<Button-1>", 
-                        lambda e: webbrowser.open("https://github.com/OpenSNPTools/openSNPQual/tree/main/docs/openSNPQual_correlation_IEEE370.md"))
+                        lambda e: webbrowser.open("https://github.com/Sparamix/SQualCheck/tree/main/docs/squalcheck_correlation_IEEE370.md"))
             text.tag_bind("link", "<Enter>", lambda e: text.config(cursor="hand2"))
             text.tag_bind("link", "<Leave>", lambda e: text.config(cursor=""))
             
@@ -628,14 +628,14 @@ class OpenSNPQualGUI:
             # GitHub option
             text.insert("end", "or\n\n")
             text.insert("end", "2. GitHub Issues: ", "bold")
-            text.insert("end", "OpenSNPQual Issues Page", "github_link")
+            text.insert("end", "SQualCheck Issues Page", "github_link")
             text.insert("end", "\n")
-            text.insert("end", "https://github.com/OpenSNPTools/openSNPQual/issues")
+            text.insert("end", "https://github.com/Sparamix/SQualCheck/issues")
             text.insert("end", "\n\n")
             
             
             text.insert("end", "Please include:\n", "bold")
-            text.insert("end", "  • OpenSNPQual version\n")
+            text.insert("end", "  • SQualCheck version\n")
             text.insert("end", "  • Description of the issue\n")
             text.insert("end", "  • Steps to reproduce\n")
             text.insert("end", "  • Error messages (if any)\n")
@@ -648,9 +648,9 @@ class OpenSNPQualGUI:
             
             # Bind click events
             text.tag_bind("email_link", "<Button-1>", 
-                        lambda e: webbrowser.open("mailto:giorgi.snp@pm.me?subject=OpenSNPQual%20Bug%20Report"))
+                        lambda e: webbrowser.open("mailto:giorgi.snp@pm.me?subject=SQualCheck%20Bug%20Report"))
             text.tag_bind("github_link", "<Button-1>", 
-                        lambda e: webbrowser.open("https://github.com/OpenSNPTools/openSNPQual/issues"))
+                        lambda e: webbrowser.open("https://github.com/Sparamix/SQualCheck/issues"))
             
             # Hover effects
             text.tag_bind("email_link", "<Enter>", lambda e: text.config(cursor="hand2"))
@@ -666,7 +666,7 @@ class OpenSNPQualGUI:
         """Show about dialog with styled text"""
         def create_content(parent):
             # Logo/Title
-            title_label = tk.Label(parent, text=f"OpenSNPQual {OPENSNPQUAL_VERSION}", 
+            title_label = tk.Label(parent, text=f"Sparamix.SQualCheck {SQUALCHECK_VERSION}",
                                 font=("Arial", 16, "bold"), foreground="#0066cc")
             title_label.pack(pady=(0, 5))
             
@@ -695,10 +695,10 @@ class OpenSNPQualGUI:
             
             text.insert("end", "License: ", "bold")
             text.insert("end", "BSD 3-Clause\n")
-            text.insert("end", "© 2025 Giorgi Maghlakelidze, OpenSNP Contributors, IEEE370 Contributors\n\n")
-            
+            text.insert("end", "© 2025 Giorgi Maghlakelidze, Sparamix Contributors, IEEE370 Contributors\n\n")
+
             text.insert("end", "Website: ", "bold")
-            text.insert("end", "https://github.com/OpenSNPTools/openSNPQual/", "website_link")
+            text.insert("end", "https://github.com/Sparamix/SQualCheck/", "website_link")
 
             text.insert("end", "\n\n")
             text.insert("end", "Made with ❤️ for the Signal Integrity Community", "italic")
@@ -711,7 +711,7 @@ class OpenSNPQualGUI:
             
             # Bind website link
             text.tag_bind("website_link", "<Button-1>", 
-                        lambda e: webbrowser.open("https://github.com/OpenSNPTools/openSNPQual/"))
+                        lambda e: webbrowser.open("https://github.com/Sparamix/SQualCheck/"))
             text.tag_bind("website_link", "<Enter>", lambda e: text.config(cursor="hand2"))
             text.tag_bind("website_link", "<Leave>", lambda e: text.config(cursor=""))
             
@@ -723,7 +723,7 @@ class OpenSNPQualGUI:
 
             text.config(state=tk.DISABLED)
         
-        CustomInfoDialog(self.root, "About OpenSNPQual", create_content)
+        CustomInfoDialog(self.root, "About SQualCheck", create_content)
 
     def _save_settings(self):
         """Persist settings to disk alongside the executable/script"""
@@ -846,7 +846,7 @@ class OpenSNPQualGUI:
 def main():
     """Main entry point"""
     parser = argparse.ArgumentParser(
-        description = OPENSNPQUAL_TITLE
+        description = SQUALCHECK_TITLE
     )
     parser.add_argument('--cli', action='store_true', 
                        help='Run in CLI mode')
@@ -869,7 +869,7 @@ def main():
             print("Error: --input is required in CLI mode")
             sys.exit(1)
         
-        cli = OpenSNPQualCLI()
+        cli = SQualCheckCLI()
         output_file = cli.process_csv(
             args.input,
             args.output,
@@ -879,7 +879,7 @@ def main():
         print(f"Results saved to: {output_file}")
     else:
         # GUI mode
-        app = OpenSNPQualGUI()
+        app = SQualCheckGUI()
         app.run()
 
 
