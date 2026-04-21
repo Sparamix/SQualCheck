@@ -93,6 +93,7 @@ class SQualCheckGUI:
         self.root = TkinterDnD.Tk() if DND_AVAILABLE else tk.Tk()
         self.root.title(SQUALCHECK_TITLE)
         self.root.geometry("1200x600")
+        self.root.minsize(600, 400)
 
         # Load persisted settings (if any)
         self.settings = load_settings()
@@ -192,45 +193,82 @@ class SQualCheckGUI:
             'causality_time',
         )
 
+        # ttk Treeview headings on Windows only render a single line of
+        # text (the native element swallows `\n`). Hide the default
+        # heading row and build our own with multi-line tk.Labels above
+        # the tree — this is the only reliable way to get a two-line
+        # heading with the cross-platform Tk we're using.
         self.tree = ttk.Treeview(
             self.table_frame,
             columns=columns,
-            show='tree headings',
+            show='tree',  # heading row hidden; we draw our own above
             height=15,
         )
 
-        # Define column headings
-        self.tree.heading('#0', text='Touchstone File')
-        self.tree.heading('passivity_freq', text='Passivity \n(PQMi, Freq)')
-        self.tree.heading('reciprocity_freq', text='Reciprocity \n(RQMi, Freq)')
-        self.tree.heading('causality_freq', text='Causality \n(CQMi, Freq)')
-        # Separator column has no label – it's just a visual gap
-        self.tree.heading('separator', text='')
-        self.tree.heading('passivity_time', text='Passivity \n(PQMa, Time)')
-        self.tree.heading('reciprocity_time', text='Reciprocity \n(RQMa, Time)')
-        self.tree.heading('causality_time', text='Causality \n(CQMa, Time)')
-
-        # Configure column widths
-        self.tree.column('#0', width=300)
+        # Configure column widths. All but the separator stretch so the
+        # table grows with the window; _sync_header_widths mirrors the
+        # tree's live widths onto the custom header cells.
+        self.tree.column('#0', width=300, stretch=True)
         for col in columns:
             if col == 'separator':
-                # Narrow, non-stretching spacer between FREQ and TIME sections
                 self.tree.column(col, width=20, anchor=tk.CENTER, stretch=False)
             else:
-                self.tree.column(col, width=140, anchor=tk.CENTER)
-        
-        # Add scrollbars
+                self.tree.column(col, width=140, anchor=tk.CENTER, stretch=True)
+
+        # Custom multi-line heading row (Frame of Labels aligned with
+        # the tree's columns).
+        HEADER_H = 44  # pixel height of the heading row
+        HEADER_BG = "#E8E8E8"
+        HEADER_BORDER = "#A0A0A0"
+        header_cells = [
+            ("Touchstone File",            300),
+            ("Passivity\n(PQMi, Freq)",    140),
+            ("Reciprocity\n(RQMi, Freq)",  140),
+            ("Causality\n(CQMi, Freq)",    140),
+            ("",                            20),  # separator gap
+            ("Passivity\n(PQMa, Time)",    140),
+            ("Reciprocity\n(RQMa, Time)",  140),
+            ("Causality\n(CQMa, Time)",    140),
+        ]
+        self.header_frame = tk.Frame(self.table_frame, background=HEADER_BG)
+        for idx, (text, px_width) in enumerate(header_cells):
+            cell = tk.Frame(
+                self.header_frame,
+                width=px_width,
+                height=HEADER_H,
+                background=HEADER_BG,
+                highlightthickness=1,
+                highlightbackground=HEADER_BORDER,
+            )
+            cell.pack_propagate(False)  # keep exact pixel width/height
+            cell.grid(row=0, column=idx, sticky="nsew")
+            tk.Label(
+                cell,
+                text=text,
+                background=HEADER_BG,
+                justify=tk.CENTER,
+                anchor=tk.CENTER,
+            ).pack(fill=tk.BOTH, expand=True)
+
+        # Scrollbars
         vsb = ttk.Scrollbar(self.table_frame, orient="vertical", command=self.tree.yview)
         hsb = ttk.Scrollbar(self.table_frame, orient="horizontal", command=self.tree.xview)
         self.tree.configure(yscrollcommand=vsb.set, xscrollcommand=hsb.set)
-        
-        # Grid layout for table and scrollbars
-        self.tree.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
-        vsb.grid(row=0, column=1, sticky=(tk.N, tk.S))
-        hsb.grid(row=1, column=0, sticky=(tk.W, tk.E))
-        
+
+        # Grid layout: header row on top, tree below, scrollbars alongside
+        self.header_frame.grid(row=0, column=0, sticky=(tk.W, tk.E))
+        self.tree.grid(row=1, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+        vsb.grid(row=1, column=1, sticky=(tk.N, tk.S))
+        hsb.grid(row=2, column=0, sticky=(tk.W, tk.E))
+
         self.table_frame.columnconfigure(0, weight=1)
-        self.table_frame.rowconfigure(0, weight=1)
+        self.table_frame.rowconfigure(1, weight=1)
+
+        # Keep custom header cells aligned with the tree's live column
+        # widths (ttk distributes extra width across `stretch=True` cols
+        # on resize).
+        self._header_column_order = ('#0',) + columns
+        self.tree.bind("<Configure>", self._sync_header_widths)
 
         # Progress bar and status label at bottom
         bottom_frame = ttk.Frame(self.main_frame)
@@ -249,7 +287,15 @@ class SQualCheckGUI:
         self.tree.tag_configure('acceptable', foreground='orange')
         self.tree.tag_configure('bad', foreground='red')
         self.tree.tag_configure('error', foreground='gray')
-    
+
+    def _sync_header_widths(self, event=None):
+        """Resize each header cell to match its tree column's live width."""
+        cells = self.header_frame.winfo_children()
+        for cell, col in zip(cells, self._header_column_order):
+            width = self.tree.column(col, 'width')
+            if width and int(width) > 0:
+                cell.configure(width=int(width))
+
     def on_time_domain_toggle(self):
         """Handle time domain calculation toggle"""
         if self.calculate_time_domain_var.get():
