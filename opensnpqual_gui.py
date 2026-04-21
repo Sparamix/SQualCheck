@@ -417,8 +417,9 @@ class OpenSNPQualGUI:
                         if value == '-' or value < 0:
                             target_list.append("n/a")
                         else:
-                            level = self.cli.metrics.get_quality_level(metric, value)
-                            # Use Unicode symbols for quality levels
+                            level = self.cli.metrics.get_quality_level(metric, value, domain=domain)
+                            # Tk has no color-font support on Windows, so emoji
+                            # render monochrome — use plain symbols in the GUI.
                             symbol = {
                                 'good':         '✓',
                                 'acceptable':   '○',
@@ -523,10 +524,12 @@ class OpenSNPQualGUI:
     
     def copy_table_to_clipboard(self):
         """Copy table contents to clipboard"""
-        # Build tab-separated text
-        clipboard_text = "Touchstone File\tPassivity (Freq)\tPassivity (Time)\t" \
-                        "Reciprocity (Freq)\tReciprocity (Time)\t" \
-                        "Causality (Freq)\tCausality (Time)\n"
+        # Build tab-separated text. Order must match the tree's column layout:
+        # FREQ metrics first, a blank separator, then TIME metrics.
+        clipboard_text = "Touchstone File\t" \
+                        "Passivity (PQMi, Freq)\tReciprocity (RQMi, Freq)\tCausality (CQMi, Freq)\t" \
+                        "\t" \
+                        "Passivity (PQMa, Time)\tReciprocity (RQMa, Time)\tCausality (CQMa, Time)\n"
         
         for item in self.tree.get_children():
             row_data = [self.tree.item(item)['text']]

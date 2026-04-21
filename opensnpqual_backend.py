@@ -548,7 +548,9 @@ class OpenSNPQualCLI:
     
     def save_markdown_results(self, results: List[Dict], output_file: str, summary: Optional[str] = None):
         """Save results to Markdown file with color coding."""
-        with open(output_file, 'w') as f:
+        # UTF-8 is required because the report contains emoji (🟢🔵🟡🔴❌);
+        # Windows' default cp1252 cannot encode them.
+        with open(output_file, 'w', encoding='utf-8') as f:
             f.write(f"# {OPENSNPQUAL_TITLE} -- REPORT\n\n")
             f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
 
